@@ -102,6 +102,7 @@ def test_ensure_catalog_exists_creates_and_is_idempotent(spark: SparkSession):
 def test_check_table_exists(spark: SparkSession, sample_df, test_schema):
     present = get_table_fqn(CATALOG, test_schema, "present")
     missing = get_table_fqn(CATALOG, test_schema, "missing")
+    spark.sql(f"DROP TABLE IF EXISTS {present}")
     sample_df.write.format("delta").saveAsTable(present)
 
     assert check_table_exists(spark, present)
